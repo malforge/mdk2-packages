@@ -5,42 +5,43 @@ namespace IngameScript
 {
     public class Box : View
     {
-        float _rotation;
         float _rotationRad;
-        public Color Color { get; set; }
-        public string PatternId { get; set; }
-        public bool Mirror { get; set; }
-        public bool Flip { get; set; }
 
-        public float Rotation
+        public Box()
         {
-            get { return _rotation; }
-            set
+            Set("Color", Color.White, true);
+            Set("PatternId", "SquareSimple", true);
+        }
+
+        protected override void OnPropertyChanged(IProperty property)
+        {
+            base.OnPropertyChanged(property);
+            switch (property.Name)
             {
-                _rotation = value;
-                _rotationRad = MathHelper.ToRadians(value);
+                case "Rotation":
+                    _rotationRad = MathHelper.ToRadians(((Property<float>)property).Get());
+                    break;
             }
         }
-        
-        protected override void OnBeforeFrame()
-        {
-            Color = Color.White;
-            PatternId = "SquareSimple";
-            Rotation = 0f;
-        }
+
+        protected override void OnBeforeFrame() { }
 
         protected override void OnDraw(DC dc)
         {
             var size = dc.Bounds.Size;
-            if (Mirror) size.X = -size.X;
-            if (Flip) size.Y = -size.Y;
+            var mirror = Get<bool>("Mirror");
+            var flip = Get<bool>("Flip");
+            var color = Get<Color>("Color");
+            var patternId = Get<string>("PatternId");
+            if (mirror) size.X = -size.X;
+            if (flip) size.Y = -size.Y;
             dc.Add(new MySprite
             {
                 Type = SpriteType.TEXTURE,
-                Data = PatternId,
+                Data = patternId,
                 Position = dc.Bounds.Center,
                 Size = size,
-                Color = Color,
+                Color = color,
                 RotationOrScale = _rotationRad,
                 Alignment = TextAlignment.CENTER
             });

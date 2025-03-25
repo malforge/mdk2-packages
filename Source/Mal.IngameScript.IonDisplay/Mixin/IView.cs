@@ -6,6 +6,10 @@ namespace IngameScript
 {
     public interface IView
     {
+        IView Parent { get; set; }
+        IIon Context { get; }
+        T Get<T>(string name);
+        void Set<T>(string name, T value, bool valueIsDefault = false);
         void BeginFrame(IIon ion);
         void Draw(DC dc);
     }

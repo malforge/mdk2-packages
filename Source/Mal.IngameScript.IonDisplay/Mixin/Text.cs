@@ -12,41 +12,40 @@ namespace IngameScript
         Vector2 _measuredSize;
         string _measuredValue;
 
-        public TextAlignment Alignment = TextAlignment.LEFT;
-        public Color Color = Color.White;
-        public string FontId = "White";
-        public float FontSize = 24f;
-        public string Value;
+        public Text()
+        {
+            Set("FontId", "White");
+            Set("FontSize", 24f);
+            Set("Color", Color.White);
+        }
 
         public override Vector2 Measure()
         {
-            var value = Value ?? "";
+            var value = Get<string>("Value");
+            if (string.IsNullOrEmpty(value))
+                return Vector2.Zero;
+            var fontId = Get<string>("FontId");
+            var fontSize = Get<float>("FontSize");
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (_measuredFontSize != FontSize || _measuredFontId != FontId || _measuredValue != value)
+            if (_measuredFontSize != fontSize || _measuredFontId != fontId || _measuredValue != value)
             {
-                _measuredFontSize = FontSize;
-                _measuredFontId = FontId;
+                _measuredFontSize = fontSize;
+                _measuredFontId = fontId;
                 _measuredValue = value;
-                _measuredSize = Context.MeasureString(new StringSegment(value), FontId, FontSize, out _fontScale);
+                _measuredSize = Context.MeasureString(new StringSegment(value), fontId, fontSize, out _fontScale);
             }
 
             return _measuredSize;
         }
 
-        protected override void OnBeforeFrame()
-        {
-            Alignment = TextAlignment.LEFT;
-            Color = Color.White;
-            FontId = "White";
-            FontSize = 24f;
-            Value = null;
-        }
+        protected override void OnBeforeFrame() { }
 
         protected override void OnDraw(DC dc)
         {
             Measure();
             Vector2 position;
-            switch (Alignment)
+            var alignment = Get<TextAlignment>("Alignment");
+            switch (alignment)
             {
                 case TextAlignment.RIGHT:
                     position = new Vector2(dc.Bounds.Right, dc.Bounds.Y);
@@ -62,12 +61,12 @@ namespace IngameScript
             dc.Add(new MySprite
             {
                 Type = SpriteType.TEXT,
-                Data = Value,
+                Data = Get<string>("Value"),
                 Position = position,
                 RotationOrScale = _fontScale,
-                Color = Color,
-                Alignment = Alignment,
-                FontId = FontId,
+                Color = Get<Color>("Color"),
+                Alignment = Get<TextAlignment>("Alignment"),
+                FontId = Get<string>("FontId"),
                 Size = dc.Bounds.Size
             });
         }

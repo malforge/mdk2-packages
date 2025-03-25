@@ -7,19 +7,17 @@ namespace IngameScript
 {
     public class Frame : View, IContainer
     {
-        readonly List<View> _children = new List<View>();
+        readonly List<IView> _children = new List<IView>();
+        IReadOnlyList<IView> IContainer.Children => _children;
+        protected List<IView> Children => _children;
 
-        public bool ClipToBounds;
-
-        public IReadOnlyList<View> Children => _children;
-
-        void IContainer.Add(View view)
+        void IContainer.Add(IView view)
         {
             _children.Add(view);
             view.Parent = this;
         }
 
-        void IContainer.AddRange(IEnumerable<View> views)
+        void IContainer.AddRange(IEnumerable<IView> views)
         {
             foreach (var view in views)
             {
@@ -43,7 +41,7 @@ namespace IngameScript
 
         protected virtual void CloseChildDc(DC dc)
         {
-            if (!ClipToBounds) return;
+            if (!Get<bool>("ClipToBounds")) return;
             var clip = Context.PopClip();
             if (clip.HasValue)
                 dc.Add(new MySprite(SpriteType.CLIP_RECT, position: new Vector2(clip.Value.X, clip.Value.Y), size: new Vector2(clip.Value.Width, clip.Value.Height)));
@@ -53,7 +51,7 @@ namespace IngameScript
 
         protected virtual DC OpenChildDc(DC dc)
         {
-            if (!ClipToBounds) return dc;
+            if (!Get<bool>("ClipToBounds")) return dc;
             var clip = Context.PushClip(dc.Bounds);
             dc.Add(new MySprite(SpriteType.CLIP_RECT,
                 position: new Vector2(clip.X, clip.Y),
@@ -66,15 +64,16 @@ namespace IngameScript
         {
             if (_children == null || _children.Count == 0)
                 return Vector2.Zero;
-            var extents = _children[0].Bounds;
+            var extents = _children[0].Get<RectangleF>("Bounds");
             for (var i = 1; i < _children.Count; i++)
             {
                 var child = _children[i];
+                var childBounds = child.Get<RectangleF>("Bounds");
                 extents = new RectangleF(
-                    Math.Min(extents.X, child.Bounds.X),
-                    Math.Min(extents.Y, child.Bounds.Y),
-                    Math.Max(extents.Right, child.Bounds.Right),
-                    Math.Max(extents.Bottom, child.Bounds.Bottom));
+                    Math.Min(extents.X, childBounds.X),
+                    Math.Min(extents.Y, childBounds.Y),
+                    Math.Max(extents.Right, childBounds.Right),
+                    Math.Max(extents.Bottom, childBounds.Bottom));
             }
 
             return extents.Size;

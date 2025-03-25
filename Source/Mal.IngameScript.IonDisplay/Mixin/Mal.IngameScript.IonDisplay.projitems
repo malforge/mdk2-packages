@@ -14,13 +14,12 @@
         <Compile Include="$(MSBuildThisFileDirectory)BoxX.cs" />
         <Compile Include="$(MSBuildThisFileDirectory)FrameX.cs" />
         <Compile Include="$(MSBuildThisFileDirectory)LineX.cs" />
-        <Compile Include="$(MSBuildThisFileDirectory)StackX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VStackX.cs" />
         <Compile Include="$(MSBuildThisFileDirectory)ColorExtensions.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)EnumerableExtensions.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)Flexing.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)HashSetExtensions.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)IContainer.cs"/>
-        <Compile Include="$(MSBuildThisFileDirectory)IStyleSelector.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)Line.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)ScaleMode.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)TextX.cs" />

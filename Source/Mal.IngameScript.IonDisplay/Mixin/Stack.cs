@@ -23,8 +23,10 @@ namespace IngameScript
             var position = childDc.Bounds.Position;
             foreach (var child in Children)
             {
-                var baseBounds = new RectangleF(position, child.Bounds.Size + child.Margin.Size);
-                var childBounds = new RectangleF(position.X + child.Margin.Left, position.Y + child.Margin.Top, child.Bounds.Width, child.Bounds.Height);
+                var childBounds = child.Get<RectangleF>("Bounds");
+                var childMargin = child.Get<Thickness>("Margin");
+                var baseBounds = new RectangleF(position, childBounds.Size + childMargin.Size);
+                childBounds = new RectangleF(position.X + childMargin.Left, position.Y + childMargin.Top, childBounds.Width, childBounds.Height);
                 Draw(child, childDc.WithBounds(childBounds));
                 Advance(child, ref position, baseBounds.Size);
             }
@@ -32,8 +34,8 @@ namespace IngameScript
             CloseChildDc(childDc);
         }
 
-        protected abstract void Advance(View child, ref Vector2 position, Vector2 size);
+        protected abstract void Advance(IView child, ref Vector2 position, Vector2 size);
 
-        protected abstract void MutateSizeOnMeasure(View child, ref Vector2 size);
+        protected abstract void MutateSizeOnMeasure(IView child, ref Vector2 size);
     }
 }

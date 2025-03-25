@@ -23,5 +23,10 @@
         <AdditionalFiles Include="Instructions.readme"/>
         <AdditionalFiles Include="thumb.png"/>
     </ItemGroup>
+    <ItemGroup>
+      <Compile Include="..\Mixin\HStackX.cs">
+        <Link>Mixin\HStackX.cs</Link>
+      </Compile>
+    </ItemGroup>
     <Import Project="..\Mixin\Mal.IngameScript.IonDisplay.projitems" Label="Shared"/>
 </Project>

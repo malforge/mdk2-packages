@@ -10,18 +10,16 @@ namespace IngameScript
         Vector2 _offset;
         float _scale;
 
-        Action<MySprite> /*_baseAdd, */
-            _viewAdd;
+        Action<MySprite>  _viewAdd;
 
-        public Thickness Padding;
-        public ScaleMode ScaleMode = ScaleMode.Fit;
-        public Vector2 VirtualSize;
+        public ViewBox()
+        {
+            Set("ScaleMode", ScaleMode.Fit);
+        }
 
         protected override void OnBeforeFrame()
         {
             base.OnBeforeFrame();
-            VirtualSize = new Vector2(0, 0);
-            ScaleMode = ScaleMode.Fit;
             _viewAdd = Add;
         }
 
@@ -48,7 +46,7 @@ namespace IngameScript
 
         protected virtual void DrawContent(DC childDc)
         {
-            switch (ScaleMode)
+            switch (Get<ScaleMode>("ScaleMode"))
             {
                 case ScaleMode.None:
                     DrawChildren(childDc);
@@ -66,15 +64,16 @@ namespace IngameScript
         {
             if (Children.Count == 0) return;
             // First, get the extents of the children
-            var extents = Children[0].Bounds;
+            var extents = Children[0].Get<RectangleF>("Bounds");
             for (var i = 1; i < Children.Count; i++)
             {
                 var child = Children[i];
+                var childBounds = child.Get<RectangleF>("Bounds");
                 extents = new RectangleF(
-                    Math.Min(extents.X, child.Bounds.X),
-                    Math.Min(extents.Y, child.Bounds.Y),
-                    Math.Max(extents.Right, child.Bounds.Right),
-                    Math.Max(extents.Bottom, child.Bounds.Bottom));
+                    Math.Min(extents.X, childBounds.X),
+                    Math.Min(extents.Y, childBounds.Y),
+                    Math.Max(extents.Right, childBounds.Right),
+                    Math.Max(extents.Bottom, childBounds.Bottom));
             }
 
             // Then we center that into the viewport. We need to compensate for the X and Y
@@ -98,22 +97,26 @@ namespace IngameScript
 
         void DrawFit(DC dc)
         {
-            var virtualBounds = new RectangleF(0, 0, VirtualSize.X + Padding.HorizontalThickness, VirtualSize.Y + Padding.VerticalThickness);
+            var virtualSize = Get<Vector2>("VirtualSize");
+            var padding = Get<Thickness>("Padding");
+            var virtualBounds = new RectangleF(0, 0, virtualSize.X + padding.HorizontalThickness, virtualSize.Y + padding.VerticalThickness);
             _scale = Math.Min(dc.Bounds.Width / virtualBounds.Width, dc.Bounds.Height / virtualBounds.Height);
-            var scaledBounds = new RectangleF(Padding.Left, Padding.Top, virtualBounds.Width * _scale, virtualBounds.Height * _scale);
+            var scaledBounds = new RectangleF(padding.Left, padding.Top, virtualBounds.Width * _scale, virtualBounds.Height * _scale);
             _offset = dc.Bounds.Center - scaledBounds.Center;
-            virtualBounds = new RectangleF(Padding.Left, Padding.Top, VirtualSize.X, VirtualSize.Y);
+            virtualBounds = new RectangleF(padding.Left, padding.Top, virtualSize.X, virtualSize.Y);
             foreach (var child in Children)
                 Draw(child, dc.WithBounds(virtualBounds).WithAdd(_viewAdd));
         }
 
         void DrawFill(DC dc)
         {
-            var virtualBounds = new RectangleF(0, 0, VirtualSize.X + Padding.HorizontalThickness, VirtualSize.Y + Padding.VerticalThickness);
+            var virtualSize = Get<Vector2>("VirtualSize");
+            var padding = Get<Thickness>("Padding");
+            var virtualBounds = new RectangleF(0, 0, virtualSize.X + padding.HorizontalThickness, virtualSize.Y + padding.VerticalThickness);
             _scale = Math.Max(dc.Bounds.Width / virtualBounds.Width, dc.Bounds.Height / virtualBounds.Height);
             var scaledBounds = new RectangleF(0, 0, virtualBounds.Width * _scale, virtualBounds.Height * _scale);
             _offset = dc.Bounds.Center - scaledBounds.Center;
-            virtualBounds = new RectangleF(Padding.Left, Padding.Top, VirtualSize.X, VirtualSize.Y);
+            virtualBounds = new RectangleF(padding.Left, padding.Top, virtualSize.X, virtualSize.Y);
             foreach (var child in Children)
                 Draw(child, dc.WithBounds(virtualBounds).WithAdd(_viewAdd));
         }
