@@ -28,10 +28,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     
     - name: Setup .NET (for version check)
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
     
@@ -115,7 +115,7 @@ jobs:
     
     - name: Setup SteamCMD
       if: steps.version-check.outputs.needs-build == 'true'
-      uses: CyberAndrii/setup-steamcmd@v1.1.5
+      uses: andriivitiv/setup-steamcmd@v1.3.0
     
     - name: Install Build Dependencies
       if: steps.version-check.outputs.needs-build == 'true'
@@ -151,7 +151,7 @@ jobs:
     
     - name: Setup .NET
       if: steps.version-check.outputs.needs-build == 'true'
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
     
@@ -318,7 +318,7 @@ jobs:
     
     - name: Upload package artifacts
       if: steps.build-summary.outputs.has-packages == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: nuget-packages
         path: libraries/**/*.nupkg
@@ -331,13 +331,13 @@ jobs:
     
     steps:
     - name: Download package artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: nuget-packages
         path: packages
     
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '8.0.x'
     
