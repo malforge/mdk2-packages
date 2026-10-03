@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>6ad5c053-4062-469a-9f85-469efdb7d3ba</SharedGUID>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ByteData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModelReceivedFn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)INetworkProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NetworkChannel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReadDataModelFn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SizeOfDataModelFn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WriteDataModelFn.cs" />
+  </ItemGroup>
+</Project>

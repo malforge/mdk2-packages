@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="Mal.MdkModMixin.Network/Mal.MdkModMixin.Network.shproj" />
+  <Project Path="Mal.MdkModMixin.Network.Demo/Mal.MdkModMixin.Network.Demo.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="Mal.MdkModMixin.Network.Tests/Mal.MdkModMixin.Network.Tests.csproj">
+    <Platform Project="x64" />
+  </Project>
+</Solution>
