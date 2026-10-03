@@ -28,4 +28,4 @@
 
 ---
 
-*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-05-22*
+*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-10-03*
