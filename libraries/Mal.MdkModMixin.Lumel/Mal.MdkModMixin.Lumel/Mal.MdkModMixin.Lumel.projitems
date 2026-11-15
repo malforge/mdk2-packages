@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a18e127d-a1f6-4b62-b567-c3d473c1a815</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Lumel</Import_RootNamespace>
+  </PropertyGroup>
+  <!-- Globbed, as the mod's own files are: a new file is in the build by being in the folder. -->
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" Exclude="$(MSBuildThisFileDirectory)obj\**;$(MSBuildThisFileDirectory)bin\**" />
+  </ItemGroup>
+  <!-- Packed into each mod built on Lumel, at its path under Content. -->
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)Content\**\*" />
+  </ItemGroup>
+</Project>

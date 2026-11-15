@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="Mal.MdkModMixin.Lumel.Sim/Mal.MdkModMixin.Lumel.Sim.shproj" />
+  <Project Path="Mal.MdkModMixin.Lumel.Sim.Demo/Mal.MdkModMixin.Lumel.Sim.Demo.csproj">
+    <Platform Project="x64" />
+  </Project>
+</Solution>

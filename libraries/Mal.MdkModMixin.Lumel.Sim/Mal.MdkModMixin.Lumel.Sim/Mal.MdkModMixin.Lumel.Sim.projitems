@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>85533f61-f6f7-448e-a13e-c43266e3da0f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Lumel.Sim</Import_RootNamespace>
+  </PropertyGroup>
+  <!--
+    The game's screen drawn on a desktop: for a harness, never for a mod. It needs WPF, x64 and the DirectXTexNet package
+    in the project that includes it, and the game's assemblies that project references.
+  -->
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" Exclude="$(MSBuildThisFileDirectory)obj\**;$(MSBuildThisFileDirectory)bin\**" />
+  </ItemGroup>
+</Project>

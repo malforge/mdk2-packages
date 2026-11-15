@@ -1,0 +1,27 @@
+<Project>
+    <!--
+        The game's own assemblies, for a project that runs Lumel outside the game: its tests.
+
+        Lumel compiles against the game (VRageMath, Sandbox.ModAPI), so anything that runs it needs the real assemblies.
+        The package finds the game from an mdk.local.ini beside the project (gitignored, one line: binarypath=...), and
+        copies the assemblies into bin because nothing here runs inside the game. They are Keen's and are never
+        redistributed; bin is not checked in.
+    -->
+    <PropertyGroup>
+        <SpaceEngineersBinCopyLocal>true</SpaceEngineersBinCopyLocal>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Mal.Mdk2.References" Version="2.2.9">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!-- Only the assemblies Lumel uses; the graphics and render assemblies stay out, since nothing outside the game draws. -->
+    <Target Name="ReferenceOnlyWhatLumelUses" AfterTargets="SpaceEngineers">
+        <ItemGroup>
+            <Reference Remove="System.Collections.Immutable;Sandbox.Graphics;VRage.Audio;VRage.Render;VRage.Render11;VRage.Scripting" />
+        </ItemGroup>
+    </Target>
+</Project>

@@ -1,0 +1,3 @@
+# Lumel.Sim is compiled into each harness that includes it, whose own root namespace the check would hold these files to.
+[*.cs]
+resharper_check_namespace_highlighting = none

@@ -1,0 +1,8 @@
+root = true
+
+[*.cs]
+# Lumel compares floats exactly only to tell whether a value changed since it was last used, never results of arithmetic.
+resharper_compare_of_floats_by_equality_operator_highlighting = none
+# Lumel is a library: the callers of a public member are the mods built on it, which this repository never sees, so
+# a member is judged by whether it belongs in the API, not by its uses here.
+resharper_unused_auto_property_accessor_global_highlighting = none

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="..\..\Mal.MdkModMixin.Lumel\build\Lumel.GameReferences.props" />
+
+    <!-- The game's screen drawn on a desktop, compiled for Lumel's tests; a Release build packs it as a source package. -->
+    <PropertyGroup>
+        <TargetFramework>net48</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <LangVersion>latest</LangVersion>
+        <Nullable>annotations</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Platforms>x64</Platforms>
+        <PlatformTarget>x64</PlatformTarget>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsPackable>false</IsPackable>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <RootNamespace>Lumel.Sim</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DirectXTexNet" Version="1.0.1" />
+        <PackageReference Include="Mal.Mdk2.SharedNugetBuilder" Version="1.0.13">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <ProjectReference Include="..\..\Mal.MdkModMixin.Lumel\Mal.MdkModMixin.Lumel.Demo\Mal.MdkModMixin.Lumel.Demo.csproj" />
+    </ItemGroup>
+
+    <Import Project="..\Mal.MdkModMixin.Lumel.Sim\Mal.MdkModMixin.Lumel.Sim.projitems" Label="Shared" />
+</Project>
