@@ -518,4 +518,4 @@ using (dc.BeginDraw())
 
 ---
 
-*Documentation auto-generated from package metadata. Last updated: 2026-10-03*
+*Documentation auto-generated from package metadata. Last updated: 2026-11-16*

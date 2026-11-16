@@ -55,4 +55,4 @@ Add this to your `.csproj` file:
 
 ---
 
-*Installation instructions auto-generated. Last updated: 2026-10-03*
+*Installation instructions auto-generated. Last updated: 2026-11-16*
