@@ -7,7 +7,7 @@ namespace Lumel.Windows
 {
     /// <summary>
     ///     A window that hangs from an element on the side given by <see cref="Side" />, or opens at a point, and closes
-    ///     when a press lands anywhere else.
+    ///     when a press lands anywhere else, or when the element it hangs from is no longer shown.
     /// </summary>
     /// <remarks>A press that closes it goes no further.</remarks>
     public class Popup : Window
@@ -73,6 +73,7 @@ namespace Lumel.Windows
         ///     Gets or sets what finds the element <see cref="Hang" /> hangs the popup from, for an anchor that is rebuilt
         ///     while the popup is open, or null to hang from <see cref="Anchor" /> as it is set.
         /// </summary>
+        /// <remarks>Also called as the popup is drawn while its anchor is no longer shown, before it closes for that.</remarks>
         public Func<Element> FnAnchor { get; set; }
 
         /// <summary>Gets the distance between the popup and its anchor, in UI units.</summary>

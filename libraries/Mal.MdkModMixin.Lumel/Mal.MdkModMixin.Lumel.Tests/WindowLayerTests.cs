@@ -186,6 +186,7 @@ public class WindowLayerTests
 
         var popup = new Popup { Anchor = anchor, Content = content };
         var layer = new WindowLayer();
+        layer.Covers(new VStack { Children = { anchor } });
         layer.Open(popup);
         layer.Draw(new Recording(Area), Area);
         return (layer, popup, scroll, rows);
@@ -449,6 +450,72 @@ public class WindowLayerTests
 
         Assert.True(popup.IsOpen);
         Assert.True(layer.Dismiss(new Vector2(Area.Width - 1f, Area.Height - 1f)));
+        Assert.False(popup.IsOpen);
+    }
+
+    /// <summary>
+    ///     A popup closes, as plainly closed, at the first draw after its anchor is taken out of the tree or something
+    ///     holding it is hidden, and a popup hanging from one in it closes with it.
+    /// </summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void APopupClosesOnceItsAnchorIsNoLongerShown(bool removed)
+    {
+        var anchor = new Button { Text = "Anchor" };
+        var row = new VStack { Children = { anchor } };
+        var screen = new VStack { Children = { row } };
+        var layer = new WindowLayer();
+        layer.Covers(screen);
+        var item = new Button { Text = "Item" };
+        var popup = new Popup { Anchor = anchor, Content = item };
+        var submenu = new Popup { Anchor = item, Content = new Label { Text = "Words" } };
+        var reasons = new List<CloseReason>();
+        popup.Closed += reasons.Add;
+        popup.Open();
+        submenu.Open();
+
+        layer.Draw(new Recording(Area), Area);
+        Assert.True(popup.IsOpen);
+        Assert.True(submenu.IsOpen);
+
+        if (removed)
+            screen.Children.Remove(row);
+        else
+            row.IsVisible = false;
+
+        Assert.True(popup.IsOpen);
+        layer.Draw(new Recording(Area), Area);
+
+        Assert.False(popup.IsOpen);
+        Assert.False(submenu.IsOpen);
+        Assert.Equal(0, layer.Count);
+        Assert.Equal(new[] { CloseReason.Closed }, reasons);
+    }
+
+    /// <summary>A popup with a finder for its anchor moves to the one it finds when its anchor is rebuilt, and closes once it finds none.</summary>
+    [Fact]
+    public void APopupWithAFinderMovesToItsRebuiltAnchorAndClosesWithoutOne()
+    {
+        var anchor = new Button { Text = "First" };
+        var row = new VStack { Children = { anchor } };
+        var layer = new WindowLayer();
+        layer.Covers(new VStack { Children = { row } });
+        // ReSharper disable once AccessToModifiedClosure - the finder is meant to see the anchor as the test rebuilds it.
+        var popup = new Popup { Anchor = anchor, FnAnchor = () => anchor, Content = new Label { Text = "Words" } };
+        popup.Open();
+
+        row.Children.Remove(anchor);
+        anchor = new Button { Text = "Rebuilt" };
+        row.Children.Add(anchor);
+        layer.Draw(new Recording(Area), Area);
+
+        Assert.True(popup.IsOpen);
+        Assert.Same(anchor, popup.Anchor);
+
+        row.Children.Remove(anchor);
+        layer.Draw(new Recording(Area), Area);
+
         Assert.False(popup.IsOpen);
     }
 

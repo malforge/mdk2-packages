@@ -76,17 +76,17 @@ jobs:
           
           # Try to get package info from NuGet feed
           try {
-            $result = dotnet package search $library --exact-match --source "GitHub" --format json 2>&1 | Out-String
+            $result = dotnet package search $library --exact-match --prerelease --source "GitHub" --format json 2>&1 | Out-String
             
             if ($LASTEXITCODE -eq 0 -and $result -match '\{') {
               $searchResult = $result | ConvertFrom-Json
               $foundPackage = $searchResult.searchResult | Where-Object { $_.packages.id -eq $library } | Select-Object -First 1
               
               if ($foundPackage -and $foundPackage.packages) {
-                $publishedVersion = $foundPackage.packages[0].version
-                Write-Host "$library`: Published version is v$publishedVersion"
-                
-                if ($localVersion -eq $publishedVersion) {
+                $publishedVersions = @($foundPackage.packages | ForEach-Object { $_.version })
+                Write-Host "$library`: Published versions are $($publishedVersions -join ', ')"
+
+                if ($publishedVersions -contains $localVersion) {
                   Write-Host "$library`: Already published, skipping"
                   continue
                 }

@@ -156,9 +156,13 @@ namespace Lumel.Windows
         ///     Lays out and draws every open window in the area it chose, the whole of <paramref name="screen" /> or the
         ///     terminal's <paramref name="terminal" /> within it, each modal one over a backdrop covering the screen.
         /// </summary>
-        /// <remarks>A window is as wide and as tall as its placement says where it says, and otherwise as it asks, up to its area.</remarks>
+        /// <remarks>
+        ///     A window is as wide and as tall as its placement says where it says, and otherwise as it asks, up to its area.
+        ///     A popup whose anchor is no longer shown here closes first.
+        /// </remarks>
         public void Draw(IGraphics g, RectangleF screen, RectangleF terminal)
         {
+            CloseStranded();
             foreach (var window in _open)
             {
                 var area = window.Area == ScreenArea.Terminal ? terminal : screen;
@@ -188,6 +192,61 @@ namespace Lumel.Windows
                 window.DrawBehind(g);
                 window.Draw(g);
             }
+        }
+
+        /// <summary>
+        ///     Closes every popup whose anchor is no longer shown here, as when it is taken out of the tree or something
+        ///     holding it is hidden; a popup with <see cref="Popup.FnAnchor" /> moves to the element that finds instead,
+        ///     where that is shown.
+        /// </summary>
+        void CloseStranded()
+        {
+            // Hiding an element raises nothing its descendants hear, so the open popups are checked once a frame: a walk up
+            // from each anchor, of which there are rarely more than one or two.
+            for (var i = 0; i < _open.Count;)
+            {
+                var popup = _open[i] as Popup;
+                if (popup == null || !Stranded(popup))
+                {
+                    i++;
+                    continue;
+                }
+
+                _open.RemoveAt(i);
+                TakenAway(popup, CloseReason.Closed);
+            }
+        }
+
+        /// <summary>
+        ///     Returns true if <paramref name="popup" /> hangs from an element no longer shown here, and nothing its
+        ///     <see cref="Popup.FnAnchor" /> finds is shown here either; moves it to what that finds where it is.
+        /// </summary>
+        bool Stranded(Popup popup)
+        {
+            if (popup.Anchor == null || Shows(popup.Anchor))
+                return false;
+
+            var found = popup.FnAnchor?.Invoke();
+            if (found == null || !Shows(found))
+                return true;
+
+            popup.Anchor = found;
+            return false;
+        }
+
+        /// <summary>
+        ///     Returns true if <paramref name="element" /> and everything holding it are visible, on the screen this layer
+        ///     covers or in a window open here.
+        /// </summary>
+        bool Shows(Element element)
+        {
+            for (var at = element; at != null; at = at.Parent)
+            {
+                if (!at.IsVisible)
+                    return false;
+            }
+
+            return element.Windows == this;
         }
 
         /// <summary>
