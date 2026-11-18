@@ -50,4 +50,4 @@ server, say) it reads that instead. So copy that folder over from a machine that
 
 ---
 
-*Documentation auto-generated from package metadata. Last updated: 2026-11-16*
+*Documentation auto-generated from package metadata. Last updated: 2026-11-18*
