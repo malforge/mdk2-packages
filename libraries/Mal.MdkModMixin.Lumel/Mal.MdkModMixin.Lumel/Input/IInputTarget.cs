@@ -37,9 +37,10 @@ namespace Lumel.Input
         bool Key(InputRoot input, MyKeys key, bool shift, bool ctrl);
 
         /// <summary>
-        ///     Offers a wheel turn of <paramref name="amount" /> to the element and returns true if it handled it.
+        ///     Offers a wheel turn of <paramref name="amount" />, positive down along Y and right along X, to the element and
+        ///     returns true if it handled it.
         /// </summary>
-        bool Wheel(float amount);
+        bool Wheel(Vector2 amount);
 
         /// <summary>
         ///     Offers <paramref name="intent" />, the meaning of a key no element handled, to the element and returns

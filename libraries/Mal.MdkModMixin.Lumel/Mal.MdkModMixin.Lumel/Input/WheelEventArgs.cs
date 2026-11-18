@@ -1,3 +1,5 @@
+using VRageMath;
+
 namespace Lumel.Input
 {
     /// <summary>
@@ -6,10 +8,10 @@ namespace Lumel.Input
     public sealed class WheelEventArgs
     {
         /// <summary>
-        ///     Creates event data for a wheel turn of <paramref name="amount" /> UI units that is about to be offered
+        ///     Creates event data for a wheel turn of <paramref name="amount" /> UI units, positive down along Y and right along X, that is about to be offered
         ///     to <paramref name="target" />.
         /// </summary>
-        public WheelEventArgs(Element target, float amount)
+        public WheelEventArgs(Element target, Vector2 amount)
         {
             Target = target;
             Amount = amount;
@@ -21,8 +23,8 @@ namespace Lumel.Input
         /// </summary>
         public Element Target { get; }
 
-        /// <summary>Gets how far the wheel turned, in UI units, where positive is down.</summary>
-        public float Amount { get; }
+        /// <summary>Gets how far the wheel turned, in UI units, positive down along Y and right along X.</summary>
+        public Vector2 Amount { get; }
 
         /// <summary>
         ///     Gets or sets whether a handler has handled the wheel, so that no element under the pointer is offered

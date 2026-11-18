@@ -342,13 +342,13 @@ namespace Lumel.Screens
 
         /// <summary>
         ///     Handles the wheel turning with the pointer at <paramref name="point" />, by <paramref name="amount" />
-        ///     UI units, positive downward.
+        ///     UI units, positive down along Y and right along X.
         /// </summary>
         /// <remarks>
         ///     Offered to the innermost element under the pointer in the window there, and then outwards. An open tip has
         ///     nothing to scroll, so the wheel reaches what lies under it.
         /// </remarks>
-        public void Wheel(Vector2 point, float amount)
+        public void Wheel(Vector2 point, Vector2 amount)
         {
             bool stopped;
             _input.Wheel(_windows.WheelAt(point, out stopped), amount);

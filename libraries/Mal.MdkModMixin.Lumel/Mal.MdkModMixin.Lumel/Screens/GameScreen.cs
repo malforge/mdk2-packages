@@ -122,10 +122,14 @@ namespace Lumel.Screens
             _view.Pointer = padding ? new Vector2(float.NegativeInfinity) : _pointer;
             _view.TipsFollowFocus = padding;
 
-            // A notch up is a positive delta and scrolls the content up, which is a negative amount.
+            // A notch up is a positive delta and scrolls the content up, which is a negative amount. The game reports only the
+            // vertical wheel, so a turn with Shift held scrolls sideways, as on the desktop.
             var wheel = input.DeltaMouseScrollWheelValue();
             if (wheel != 0)
-                _view.Wheel(_pointer, -wheel / 120f * ScrollStep);
+            {
+                var turn = -wheel / 120f * ScrollStep;
+                _view.Wheel(_pointer, input.IsAnyShiftKeyPressed() ? new Vector2(turn, 0f) : new Vector2(0f, turn));
+            }
 
             // One press at a time: the button that began it is the one whose release ends it, and a button that goes down
             // meanwhile is ignored.

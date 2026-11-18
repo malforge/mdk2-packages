@@ -58,10 +58,10 @@ namespace Lumel.Screens
 
             var middle = new Vector2(focused.Bounds.Center.X, focused.Bounds.Center.Y);
             if (Fires(pad, PadControl.ScrollUp, now))
-                view.Wheel(focused.ToScreen(middle), -ScrollStep);
+                view.Wheel(focused.ToScreen(middle), new Vector2(0f, -ScrollStep));
 
             if (Fires(pad, PadControl.ScrollDown, now))
-                view.Wheel(focused.ToScreen(middle), ScrollStep);
+                view.Wheel(focused.ToScreen(middle), new Vector2(0f, ScrollStep));
 
             return true;
         }

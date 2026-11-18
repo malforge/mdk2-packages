@@ -530,14 +530,23 @@ namespace Lumel.Text
         }
 
         /// <inheritdoc />
-        /// <remarks>Takes the wheel while any of what it holds is out of sight.</remarks>
-        protected override bool OnWheel(float amount)
+        /// <remarks>Takes each way of a turn along which any of the text is out of sight.</remarks>
+        protected override bool OnWheel(Vector2 amount)
         {
-            if (!CanScroll)
-                return false;
+            var took = false;
+            if (amount.Y != 0f && CanScroll)
+            {
+                ScrollBy(amount.Y);
+                took = true;
+            }
 
-            ScrollBy(amount);
-            return true;
+            if (amount.X != 0f && CanScrollHorizontally)
+            {
+                ScrollHorizontallyBy(amount.X);
+                took = true;
+            }
+
+            return took;
         }
 
         /// <inheritdoc />

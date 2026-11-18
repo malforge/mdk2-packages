@@ -92,14 +92,14 @@ namespace Lumel.Input
         }
 
         /// <summary>
-        ///     Offers a wheel turn of <paramref name="amount" /> UI units, where positive is down, to
+        ///     Offers a wheel turn of <paramref name="amount" /> UI units, positive down along Y and right along X, to
         ///     <paramref name="from" />, then to each element above it, and returns true if one of them handled it.
         /// </summary>
         /// <remarks>
         ///     <paramref name="from" /> is what the host found under the pointer, such as by <see cref="Element.WheelAt" />.
         ///     <see cref="PreviewWheel" /> is raised first.
         /// </remarks>
-        public bool Wheel(Element from, float amount)
+        public bool Wheel(Element from, Vector2 amount)
         {
             if (!Allows(from))
                 return false;

@@ -23,7 +23,7 @@ public class PointerRouteTests
         var (view, first) = Tall();
         var workspace = Laid(new VStack { Children = { view } });
 
-        workspace.Wheel(Middle(first), 40f);
+        workspace.Wheel(Middle(first), new Vector2(0f, 40f));
 
         Assert.Equal(40f, view.VerticalOffset);
     }
@@ -37,10 +37,10 @@ public class PointerRouteTests
         WheelEventArgs seen = null;
         workspace.Input.PreviewWheel += turned => seen = turned;
 
-        workspace.Wheel(Middle(first), 40f);
+        workspace.Wheel(Middle(first), new Vector2(0f, 40f));
 
         Assert.Same(first, seen.Target);
-        Assert.Equal(40f, seen.Amount);
+        Assert.Equal(new Vector2(0f, 40f), seen.Amount);
         Assert.Equal(40f, view.VerticalOffset);
     }
 
@@ -52,7 +52,7 @@ public class PointerRouteTests
         var workspace = Laid(new VStack { Children = { view } });
         workspace.Input.PreviewWheel += turned => turned.Handled = true;
 
-        workspace.Wheel(Middle(first), 40f);
+        workspace.Wheel(Middle(first), new Vector2(0f, 40f));
 
         Assert.Equal(0f, view.VerticalOffset);
     }
@@ -77,7 +77,7 @@ public class PointerRouteTests
         workspace.DrawScreen(new Recording(Area), Area);
         Assert.True(tip.Covers(onTip), "the tip does not hold the pointer");
 
-        workspace.Wheel(onTip, 40f);
+        workspace.Wheel(onTip, new Vector2(0f, 40f));
 
         Assert.Equal(40f, view.VerticalOffset);
     }
@@ -91,9 +91,9 @@ public class PointerRouteTests
         var outer = new Listener { Children = { view } };
         var workspace = Laid(outer);
 
-        workspace.Wheel(Middle(view), 40f);
+        workspace.Wheel(Middle(view), new Vector2(0f, 40f));
 
-        Assert.Equal(new[] { 40f }, outer.Wheels);
+        Assert.Equal(new[] { new Vector2(0f, 40f) }, outer.Wheels);
     }
 
     /// <summary>Confined, a press outside reaches nothing and leaves the keyboard where it is; a press inside reaches what it lands on.</summary>
@@ -124,7 +124,7 @@ public class PointerRouteTests
         var workspace = Laid(new VStack { Children = { inside, view } });
         workspace.Input.Confined = inside;
 
-        workspace.Wheel(Middle(first), 40f);
+        workspace.Wheel(Middle(first), new Vector2(0f, 40f));
 
         Assert.Equal(0f, view.VerticalOffset);
     }
@@ -261,9 +261,9 @@ public class PointerRouteTests
 
     sealed class Listener : VStack
     {
-        public List<float> Wheels { get; } = new List<float>();
+        public List<Vector2> Wheels { get; } = new List<Vector2>();
 
-        protected override bool OnWheel(float amount)
+        protected override bool OnWheel(Vector2 amount)
         {
             Wheels.Add(amount);
             return true;

@@ -823,11 +823,14 @@ namespace Lumel
         }
 
         /// <summary>
-        ///     Offers a wheel turn of <paramref name="amount" /> UI units (positive is down), and returns true if this
-        ///     handled it.
+        ///     Offers a wheel turn of <paramref name="amount" /> UI units, positive down along Y and right along X, and
+        ///     returns true if this handled it.
         /// </summary>
-        /// <remarks>Offered to the innermost element under the pointer, then outwards.</remarks>
-        protected virtual bool OnWheel(float amount)
+        /// <remarks>
+        ///     Offered to the innermost element under the pointer, then outwards. A turn with Shift held comes along X. An
+        ///     element that scrolls one way only returns false for a turn the other way, so the turn goes on outwards.
+        /// </remarks>
+        protected virtual bool OnWheel(Vector2 amount)
         {
             return false;
         }
@@ -885,7 +888,7 @@ namespace Lumel
         }
 
         /// <inheritdoc />
-        bool IInputTarget.Wheel(float amount)
+        bool IInputTarget.Wheel(Vector2 amount)
         {
             return OnWheel(amount);
         }
