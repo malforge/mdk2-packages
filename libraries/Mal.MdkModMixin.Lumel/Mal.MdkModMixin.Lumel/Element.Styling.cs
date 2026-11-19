@@ -362,8 +362,9 @@ namespace Lumel
             _measureDirty = true;
             _arrangeDirty = true;
 
-            for (var i = 0; i < VisualChildCount; i++)
-                GetVisualChild(i).Rehost();
+            if (_contents != null)
+                for (var i = 0; i < _contents.Count; i++)
+                    _contents[i].Rehost();
 
             _parent?.InvalidateMeasure();
         }

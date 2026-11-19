@@ -128,6 +128,31 @@ public class CoachMarkTests
         Assert.Equal(new[] { "closed" }, scene.Heard);
     }
 
+    /// <summary>A coach mark whose anchor is on a card of a deck closes without being dismissed when another card is turned to.</summary>
+    [Fact]
+    public void ItClosesWithoutBeingDismissedWhenItsAnchorsCardIsCovered()
+    {
+        var heard = new List<string>();
+        var workspace = new Workspace();
+        var anchor = new Button { Text = "New", Placement = FixedSize.Size(100f, 40f) };
+        var other = new HStack();
+        var deck = new Deck { Children = { new VStack { Children = { anchor } }, other } };
+        workspace.Open(Showing.Window(deck));
+        workspace.DrawScreen(new Recording(Area), Area);
+        var mark = new CoachMark("This is new.") { Anchor = anchor };
+        mark.Closed += _ => heard.Add("closed");
+        mark.Dismissed += () => heard.Add("dismissed");
+        mark.Open();
+        workspace.DrawScreen(new Recording(Area), Area);
+        Assert.True(mark.IsOpen);
+
+        deck.Top = other;
+        workspace.DrawScreen(new Recording(Area), Area);
+
+        Assert.False(mark.IsOpen);
+        Assert.Equal(new[] { "closed" }, heard);
+    }
+
     /// <summary>
     ///     Over a window, a coach mark leaves the world dimmed as the window asked, and Escape closes the window, which
     ///     takes the coach mark with it without dismissing it.

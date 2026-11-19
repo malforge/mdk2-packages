@@ -235,14 +235,14 @@ namespace Lumel.Windows
         }
 
         /// <summary>
-        ///     Returns true if <paramref name="element" /> and everything holding it are visible, on the screen this layer
-        ///     covers or in a window open here.
+        ///     Returns true if <paramref name="element" /> and everything holding it are visible and uncovered, on the
+        ///     screen this layer covers or in a window open here.
         /// </summary>
         bool Shows(Element element)
         {
             for (var at = element; at != null; at = at.Parent)
             {
-                if (!at.IsVisible)
+                if (!at.IsVisible || at.IsCovered)
                     return false;
             }
 

@@ -1,4 +1,5 @@
 using Lumel.Layout;
+using Lumel.Screens;
 using Lumel.Text;
 using Xunit;
 
@@ -57,5 +58,33 @@ public class DeckTests
         easel.Draw(400f, 200f);
         Assert.Equal(new[] { "two" }, easel.Written.Select(run => run.Text).ToArray());
         Assert.Same(two, deck.GetVisualChild(0));
+    }
+
+    /// <summary>
+    ///     Only what is on the top card is loaded: turning to a card loads what is on it and unloads what is on the one
+    ///     it covers, and removing the top card loads the one that takes its place.
+    /// </summary>
+    [Fact]
+    public void OnlyTheTopCardIsLoaded()
+    {
+        var area = new VRageMath.RectangleF(0f, 0f, 400f, 200f);
+        var one = new Label { Text = "one" };
+        var two = new Label { Text = "two" };
+        var deck = new Deck { Children = { new HStack { Children = { one } }, new HStack { Children = { two } } } };
+        var workspace = new Workspace();
+        workspace.Open(Showing.Window(deck));
+        workspace.DrawScreen(new Recording(area), area);
+
+        Assert.True(one.IsLoaded);
+        Assert.False(two.IsLoaded);
+
+        deck.Top = two.Parent;
+        Assert.False(one.IsLoaded);
+        Assert.True(two.IsLoaded);
+
+        deck.Children.Remove(two.Parent);
+        workspace.DrawScreen(new Recording(area), area);
+        Assert.True(one.IsLoaded);
+        Assert.False(two.IsLoaded);
     }
 }

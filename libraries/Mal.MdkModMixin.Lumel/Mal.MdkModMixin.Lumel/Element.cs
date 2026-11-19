@@ -179,13 +179,36 @@ namespace Lumel
             }
         }
 
+        /// <summary>Gets whether what holds this holds it out of sight, as a deck holds the cards under its top one.</summary>
+        public bool IsCovered => _parent != null && _parent.Covers(this);
+
+        /// <summary>Returns true if this holds <paramref name="child" /> out of sight, as a deck holds the cards under its top one.</summary>
+        /// <remarks>
+        ///     A child this covers is not loaded. Call <see cref="Reload(Element)" /> for a child whenever this starts or
+        ///     stops covering it.
+        /// </remarks>
+        protected virtual bool Covers(Element child)
+        {
+            return false;
+        }
+
+        /// <summary>
+        ///     Brings whether <paramref name="child" /> is loaded up to date, after this has started or stopped
+        ///     covering it.
+        /// </summary>
+        protected void Reload(Element child)
+        {
+            if (child != null && child._parent == this)
+                child.Reload();
+        }
+
         /// <summary>
         ///     Brings whether this is loaded up to date with whatever holds it, or with whether it is shown where nothing
         ///     does, raising the change through everything inside it.
         /// </summary>
         void Reload()
         {
-            var loaded = _parent != null ? _parent._loaded : _shown;
+            var loaded = _parent != null ? _parent._loaded && !_parent.Covers(this) : _shown;
             if (loaded == _loaded)
                 return;
 
@@ -196,8 +219,9 @@ namespace Lumel
                 Loaded?.Invoke();
             }
 
-            for (var i = 0; i < VisualChildCount; i++)
-                GetVisualChild(i).Reload();
+            if (_contents != null)
+                for (var i = 0; i < _contents.Count; i++)
+                    _contents[i].Reload();
 
             if (loaded)
                 return;

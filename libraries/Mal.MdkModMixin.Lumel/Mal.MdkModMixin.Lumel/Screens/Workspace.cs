@@ -592,15 +592,15 @@ namespace Lumel.Screens
         }
 
         /// <summary>
-        ///     Returns true if <paramref name="element" /> and everything holding it are visible, in the tip or a window
-        ///     that is open.
+        ///     Returns true if <paramref name="element" /> and everything holding it are visible and uncovered, in the
+        ///     tip or a window that is open.
         /// </summary>
         bool IsShown(Element element)
         {
             var top = element;
             for (var at = element; at != null; at = at.Parent)
             {
-                if (!at.IsVisible)
+                if (!at.IsVisible || at.IsCovered)
                     return false;
 
                 top = at;
