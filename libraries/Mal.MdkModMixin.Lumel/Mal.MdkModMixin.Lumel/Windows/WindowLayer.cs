@@ -298,26 +298,44 @@ namespace Lumel.Windows
         /// <remarks>
         ///     For whoever takes presses to ask before anything else, since a press that closes a popup goes no further,
         ///     unless it lands in the popup the last one closed hung from, as a press on a menu goes on to it once the
-        ///     submenu it opened closes.
+        ///     submenu it opened closes. A coach mark stays open through the press unless
+        ///     <see cref="CoachMark.DismissesOnPressOutside" /> is set, and is dismissed by it otherwise, keeping the press
+        ///     only where <see cref="CoachMark.PassesPressOutside" /> is cleared.
         /// </remarks>
         public bool Dismiss(Vector2 point)
         {
             Popup closed = null;
-            for (var i = _open.Count - 1; i >= 0; i--)
+            var kept = false;
+            var i = _open.Count - 1;
+            for (; i >= 0; i--)
             {
                 var window = _open[i];
                 if (On(window, point) || !(window is Popup))
                     break;
+
+                var mark = window as CoachMark;
+                if (mark != null)
+                {
+                    if (!mark.DismissesOnPressOutside)
+                        continue;
+
+                    kept |= !mark.PassesPressOutside;
+                    mark.Dismiss();
+                    continue;
+                }
 
                 _open.RemoveAt(i);
                 TakenAway(window, CloseReason.Closed);
                 closed = (Popup)window;
             }
 
+            if (kept)
+                return true;
+
             if (closed == null)
                 return false;
 
-            var under = _open.Count > 0 ? _open[_open.Count - 1] : null;
+            var under = i >= 0 ? _open[i] : null;
             return !(under is Popup && On(under, point) && WindowOf(closed.Anchor) == under);
         }
 

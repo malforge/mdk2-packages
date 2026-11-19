@@ -264,6 +264,15 @@ namespace Lumel.Styling
         };
 
         /// <summary>
+        ///     The style for a coach mark: a popup's panel edged in the accent color, its text wrapping at 320 units, with a
+        ///     tail 12 units long.
+        /// </summary>
+        public static readonly IStyle<CoachMark> CoachMark = new CoachMarkStyle(Popup)
+        {
+            Base = { Border = GameColors.Accent, Padding = new Thickness(12f, 8f), Gap = 12f, MaxWidth = 320f }
+        };
+
+        /// <summary>
         ///     The style for a menu: a popup's panel, close around its items, opening a submenu once the pointer has rested
         ///     on its item for a moment.
         /// </summary>
@@ -462,6 +471,7 @@ namespace Lumel.Styling
 
             Window,
             Popup,
+            CoachMark,
             Menu,
             MenuItem,
             Dialog,

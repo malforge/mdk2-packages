@@ -179,15 +179,41 @@ namespace Lumel.Screens
         /// <summary>Gets the root that receives keys and typed characters while an element in a window has the keyboard.</summary>
         public InputRoot Input => _input;
 
-        /// <summary>Whether the game's screen should fade the world behind it: what the window on top asked for as it opened.</summary>
+        /// <summary>
+        ///     Whether the game's screen should fade the world behind it: what the window on top asked for as it opened,
+        ///     looking past the popups over it, which hang from what is beneath them.
+        /// </summary>
         public bool DimsWorld
         {
             get
             {
-                var top = _windows.Top;
-                bool dims;
-                return top != null && _dims.TryGetValue(top, out dims) && dims;
+                for (var i = _windows.Count - 1; i >= 0; i--)
+                {
+                    var window = _windows[i];
+                    if (window is Popup)
+                        continue;
+
+                    bool dims;
+                    return _dims.TryGetValue(window, out dims) && dims;
+                }
+
+                return false;
             }
+        }
+
+        /// <summary>
+        ///     Returns the window on top that keys and Escape go to, looking past the coach marks over it, or null if none
+        ///     is open.
+        /// </summary>
+        Window KeyedTop()
+        {
+            for (var i = _windows.Count - 1; i >= 0; i--)
+            {
+                if (!(_windows[i] is CoachMark))
+                    return _windows[i];
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -415,10 +441,10 @@ namespace Lumel.Screens
             _hud.Dispose();
         }
 
-        /// <summary>Closes the window on top and returns true if one was open.</summary>
+        /// <summary>Closes the window on top, past any coach mark over it, and returns true if one was open.</summary>
         protected bool CloseTop()
         {
-            var top = _windows.Top;
+            var top = KeyedTop();
             if (top == null)
                 return false;
 
@@ -540,7 +566,7 @@ namespace Lumel.Screens
         /// <summary>Returns the element a key is offered to first: the one that has the keyboard, or else the window on top.</summary>
         Element KeysFrom()
         {
-            return _input.Focused ?? _windows.Top;
+            return _input.Focused ?? KeyedTop();
         }
 
         /// <summary>
