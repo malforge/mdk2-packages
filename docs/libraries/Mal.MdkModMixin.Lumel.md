@@ -1,7 +1,7 @@
 # Mal.MdkModMixin.Lumel
 
 > [!NOTE]
-> **Version:** 1.0.0-beta.3  
+> **Version:** 1.0.0-beta.4  
 > **Authors:** Malware  
 > **Package:** `Mal.MdkModMixin.Lumel`
 > 

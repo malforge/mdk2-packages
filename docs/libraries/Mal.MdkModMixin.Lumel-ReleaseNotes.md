@@ -1,6 +1,9 @@
 # Release Notes - Mal.MdkModMixin.Lumel
 
 ````````text
+- 1.0.0-beta.4
+  Only the top card of a deck is loaded, and turning to a card loads what is on it. A popup hanging from an element
+  on a covered card closes.
 - 1.0.0-beta.3
   A coach mark: a bubble of text hanging from an element with its tail aimed at it, dismissed by a press on it or,
   where asked, anywhere else. The world stays dimmed under a popup as the window beneath it asked.
