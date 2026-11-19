@@ -50,9 +50,9 @@ dotnet add package Mal.MdkModMixin.Lumel
 Add this to your `.csproj` file:
 
 ```xml
-<PackageReference Include="Mal.MdkModMixin.Lumel" Version="1.0.0-beta.2" />
+<PackageReference Include="Mal.MdkModMixin.Lumel" Version="1.0.0-beta.3" />
 ```
 
 ---
 
-*Installation instructions auto-generated. Last updated: 2026-11-18*
+*Installation instructions auto-generated. Last updated: 2026-11-19*

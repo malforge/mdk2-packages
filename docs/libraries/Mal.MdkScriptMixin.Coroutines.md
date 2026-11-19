@@ -474,4 +474,4 @@ public partial class Program : MyGridProgram
 
 ---
 
-*Documentation auto-generated from package metadata. Last updated: 2026-11-18*
+*Documentation auto-generated from package metadata. Last updated: 2026-11-19*
