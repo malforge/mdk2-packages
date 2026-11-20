@@ -50,9 +50,9 @@ dotnet add package Mal.MdkModMixin.Network
 Add this to your `.csproj` file:
 
 ```xml
-<PackageReference Include="Mal.MdkModMixin.Network" Version="1.0.0" />
+<PackageReference Include="Mal.MdkModMixin.Network" Version="1.0.1" />
 ```
 
 ---
 
-*Installation instructions auto-generated. Last updated: 2026-11-19*
+*Installation instructions auto-generated. Last updated: 2026-11-20*
