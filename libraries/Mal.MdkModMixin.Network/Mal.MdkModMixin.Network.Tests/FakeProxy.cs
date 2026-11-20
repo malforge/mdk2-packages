@@ -37,8 +37,12 @@ namespace Mal.MdkModMixin.Network.Tests
         /// <summary>Every message sent to one player, with whom.</summary>
         public List<KeyValuePair<ulong, byte[]>> ToPlayers { get; } = new List<KeyValuePair<ulong, byte[]>>();
 
+        /// <summary>The channel id of every handler registered, in order.</summary>
+        public List<ushort> Registered { get; } = new List<ushort>();
+
         public void RegisterSecureMessageHandler(ushort id, Action<ushort, byte[], ulong, bool> messageHandler)
         {
+            Registered.Add(id);
             _handlers.Add(messageHandler);
         }
 

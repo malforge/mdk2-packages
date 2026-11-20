@@ -67,6 +67,10 @@ Use one channel per mod: a channel carries every message type the mod registers 
 `NetworkChannel.Create` takes a type (its full name is used), a name, or a 16-bit id. Pick something only your mod
 uses, such as your session component's type or a name that includes your mod's name.
 
+A type or a name becomes its id through `NetworkChannel.IdOf`, a fixed hash (32-bit FNV-1a) that is the same on every
+machine and runtime; each message type's id is made the same way from its full name. Renaming a message type or the
+channel's type changes its id, so every machine in a world needs the same build.
+
 ## Sending
 
 | Call | Goes to |

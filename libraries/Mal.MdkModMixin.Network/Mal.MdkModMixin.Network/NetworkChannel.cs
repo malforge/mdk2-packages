@@ -105,7 +105,7 @@ namespace Mal.MdkModMixin.Network
     {
         // Reserved internal type id marking a SendToNearby envelope (origin + radius + an inner,
         // normal message). Handled in OnMessageReceived before normal dispatch. It only has to be
-        // distinct from real message type ids, which are FullName.GetHashCode() values - collision
+        // distinct from real message type ids, which are IdOf(FullName) values - collision
         // chance is ~1 in 4 billion.
         const int ProximityEnvelopeTypeId = 0x00C0FFEE;
 
@@ -168,7 +168,7 @@ namespace Mal.MdkModMixin.Network
         /// <returns>A new <see cref="Builder" /> instance.</returns>
         public static Builder Create(Type type)
         {
-            var channelId = (ushort)(type.FullName.GetHashCode() & 0xFFFF);
+            var channelId = (ushort)(IdOf(type.FullName) & 0xFFFF);
             return new Builder(channelId);
         }
 
@@ -181,8 +181,30 @@ namespace Mal.MdkModMixin.Network
         /// <returns>A new <see cref="Builder" /> instance.</returns>
         public static Builder Create(string channelName)
         {
-            var channelId = (ushort)(channelName.GetHashCode() & 0xFFFF);
+            var channelId = (ushort)(IdOf(channelName) & 0xFFFF);
             return new Builder(channelId);
+        }
+
+        /// <summary>
+        ///     Returns the id <paramref name="text" /> stands for on the wire: the 32-bit FNV-1a hash of its UTF-16
+        ///     code units, the same on every machine.
+        /// </summary>
+        /// <remarks>
+        ///     <see cref="string.GetHashCode" /> cannot serve: on .NET Core and later it differs in every process, so a
+        ///     client and a server would never agree on an id. Changing this changes every id a mod sends.
+        /// </remarks>
+        /// <param name="text">The name to hash, such as a type's full name.</param>
+        public static int IdOf(string text)
+        {
+            // FNV-1a, 32-bit: offset basis 2166136261, prime 16777619 (Fowler, Noll and Vo).
+            var hash = 2166136261u;
+            foreach (var c in text)
+            {
+                hash ^= c;
+                hash = unchecked(hash * 16777619u);
+            }
+
+            return unchecked((int)hash);
         }
 
         /// <summary>
@@ -617,7 +639,7 @@ namespace Mal.MdkModMixin.Network
             public DataModelInfo(Type type, SizeOfDataModelFn<TModel> sizeOfFn, ReadDataModelFn<TModel> readFn, WriteDataModelFn<TModel> writeFn)
             {
                 Type = type;
-                TypeId = type.FullName.GetHashCode();
+                TypeId = IdOf(type.FullName);
                 _sizeOfFn = sizeOfFn;
                 _readFn = readFn;
                 _writeFn = writeFn;
@@ -784,7 +806,7 @@ namespace Mal.MdkModMixin.Network
             public Builder UsingModel<TModel>(SizeOfDataModelFn<TModel> sizeOfFn, ReadDataModelFn<TModel> readFn, WriteDataModelFn<TModel> writeFn) where TModel : struct
             {
                 var type = typeof(TModel);
-                var typeId = type.FullName.GetHashCode();
+                var typeId = IdOf(type.FullName);
                 IDataModelInfo existingType;
                 if (_registeredTypes.TryGetValue(typeId, out existingType))
                 {
