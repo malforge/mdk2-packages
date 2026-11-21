@@ -1,6 +1,9 @@
 # Release Notes - Mal.MdkModMixin.Lumel
 
 ````````text
+- 1.0.0-beta.5
+  A token box: editable words with tokens among them, each a pressable pill the caret steps over and Backspace
+  removes whole, put in by code, marked where wrong, and wrapping where the box is narrow.
 - 1.0.0-beta.4
   Only the top card of a deck is loaded, and turning to a card loads what is on it. A popup hanging from an element
   on a covered card closes.
@@ -18,4 +21,4 @@
 
 ---
 
-*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-20*
+*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-21*
