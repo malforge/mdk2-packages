@@ -193,6 +193,31 @@ namespace Lumel.Styling
         };
 
         /// <summary>
+        ///     The style for words with tokens among them: a text box's look, with room on each side of a token.
+        /// </summary>
+        public static readonly IStyle<TokenBox> TokenBox = new TokenBoxStyle
+        {
+            Base =
+            {
+                Font = GameFonts.Default, FontSize = 20f, Color = GameColors.Ink, CaretColor = GameColors.Ink, SelectionColor = GameColors.Line, HintColor = GameColors.Faint,
+                Background = GameColors.Page, Border = GameColors.Line, Padding = new Thickness(12f, 8f), TokenSpacing = 4f
+            },
+            Focused = { Border = GameColors.ControlEdgeHot },
+            Disabled = { Color = GameColors.Dim }
+        };
+
+        /// <summary>
+        ///     The style for a token in a token box: a small button, lit while selected and edged in ink while marked.
+        /// </summary>
+        public static readonly IStyle<Token> Token = new TokenStyle(Button)
+        {
+            Base = { Padding = new Thickness(8f, 4f) },
+            Selected = { Background = GameColors.Line },
+            Marked = { Border = GameColors.Ink },
+            Disabled = { Color = GameColors.Dim }
+        };
+
+        /// <summary>
         ///     The style for a box a number is typed into: a text box's look with the number set against its right-hand
         ///     end.
         /// </summary>
@@ -462,6 +487,8 @@ namespace Lumel.Styling
             Switch,
             Tab,
             TextBox,
+            TokenBox,
+            Token,
             NumberBox,
             SpinBox,
             TextArea,
