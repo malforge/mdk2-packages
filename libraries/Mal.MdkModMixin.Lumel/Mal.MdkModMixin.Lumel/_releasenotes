@@ -1,3 +1,5 @@
+- 1.0.0-beta.6
+  Focus taken inside a popup scrolls only the scroll views inside the popup.
 - 1.0.0-beta.5
   A token box: editable words with tokens among them, each a pressable pill the caret steps over and Backspace
   removes whole, put in by code, marked where wrong, and wrapping where the box is narrow.

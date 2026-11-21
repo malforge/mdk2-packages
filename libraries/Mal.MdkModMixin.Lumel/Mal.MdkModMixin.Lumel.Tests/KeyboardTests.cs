@@ -170,6 +170,40 @@ public class KeyboardTests
     }
 
     /// <summary>
+    ///     Focus taken by a box in a popup leaves the scroll view its anchor is in where it is, though the box lies
+    ///     past the edge of that view.
+    /// </summary>
+    [Fact]
+    public void FocusInAPopupLeavesTheScrollViewAroundItsAnchor()
+    {
+        var column = new VStack();
+        for (var i = 0; i < 40; i++)
+            column.Children.Add(new Button { Text = "Word " + i, Command = new RelayCommand(() => { }) });
+
+        var scroll = new ScrollView { Content = column, Placement = FixedSize.Size(300f, 200f) };
+        var workspace = new Workspace().With(new VStack { Children = { scroll } });
+        workspace.DrawScreen(new Recording(Area), Area);
+
+        var anchor = column.Children[0];
+        foreach (var child in column.Children)
+        {
+            if (child.Bounds.Bottom <= scroll.Bounds.Bottom)
+                anchor = child;
+        }
+
+        var box = new TextBox { Placement = FixedSize.Width(200f) };
+        new Popup { Anchor = anchor, Content = box }.Open();
+        workspace.DrawScreen(new Recording(Area), Area);
+        Assert.True(box.Bounds.Bottom > scroll.Bounds.Bottom, "the box is inside the scroll view's sight");
+
+        workspace.Input.Focus(box);
+        workspace.DrawScreen(new Recording(Area), Area);
+
+        Assert.Same(box, workspace.Input.Focused);
+        Assert.Equal(0f, scroll.VerticalOffset);
+    }
+
+    /// <summary>
     ///     A menu opened from a focused button takes the keyboard, so the arrows move through it, and gives the keyboard
     ///     back to the button once it closes.
     /// </summary>

@@ -150,7 +150,9 @@ namespace Lumel.Input
             {
                 ((IInputTarget)_focused).Focus(byPress);
                 ((IInputTarget)_focused).ShowsFocus = _keysLast || _focused.Focusable;
-                for (var at = Above(_focused); at != null; at = Above(at))
+                // A scroll view brings into view only what it holds, so the walk stops at a popup rather than going on to
+                // the scroll views around its anchor.
+                for (var at = _focused.Parent; at != null; at = at.Parent)
                     (at as ScrollView)?.BringIntoView(_focused);
             }
 
