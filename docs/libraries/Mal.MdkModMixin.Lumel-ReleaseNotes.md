@@ -1,6 +1,9 @@
 # Release Notes - Mal.MdkModMixin.Lumel
 
 ````````text
+- 1.0.0-beta.7
+  An element whose look sets FollowsUserBackgroundOpacity paints its background at the game's interface background
+  opacity setting.
 - 1.0.0-beta.6
   Focus taken inside a popup scrolls only the scroll views inside the popup.
 - 1.0.0-beta.5
@@ -23,4 +26,4 @@
 
 ---
 
-*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-21*
+*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-24*

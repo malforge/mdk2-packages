@@ -1,7 +1,7 @@
 # Mal.MdkModMixin.Lumel
 
 > [!NOTE]
-> **Version:** 1.0.0-beta.6  
+> **Version:** 1.0.0-beta.7  
 > **Authors:** Malware  
 > **Package:** `Mal.MdkModMixin.Lumel`
 > 
@@ -138,4 +138,4 @@ your screens.
 
 ---
 
-*Documentation auto-generated from package metadata. Last updated: 2026-11-21*
+*Documentation auto-generated from package metadata. Last updated: 2026-11-24*
