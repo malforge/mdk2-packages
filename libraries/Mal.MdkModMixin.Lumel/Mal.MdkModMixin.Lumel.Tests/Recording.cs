@@ -38,7 +38,14 @@ sealed class Recording(RectangleF area) : IGraphics
 
     public Vector2 MeasureText(string font, StringBuilder text, float size) => new Vector2(text.Length * size * 0.5f, size);
 
-    public void Fill(RectangleF destination, Color color, float rotation = 0f) => Fills.Add(destination);
+    /// <summary>Gets the color of each fill, in the order of <see cref="Fills" />.</summary>
+    public List<Color> FillColors { get; } = new List<Color>();
+
+    public void Fill(RectangleF destination, Color color, float rotation = 0f)
+    {
+        Fills.Add(destination);
+        FillColors.Add(color);
+    }
 
     /// <summary>Gets the number of clips pushed.</summary>
     public int Clips { get; private set; }

@@ -592,8 +592,17 @@ namespace Lumel
 
         void DrawBox(IGraphics g)
         {
-            if (Background.A > 0)
-                g.Fill(Bounds, Background);
+            var background = Background;
+            if (FollowsUserBackgroundOpacity && background.A > 0)
+            {
+                // A walk up to the window, each frame, for the elements that ask for it alone.
+                var layer = Windows;
+                if (layer != null)
+                    background = new Color(background.R, background.G, background.B, (byte)(background.A * layer.UserBackgroundOpacity));
+            }
+
+            if (background.A > 0)
+                g.Fill(Bounds, background);
 
             if (Pattern != null)
                 Pattern.Draw(g, Bounds, PatternOrigin());

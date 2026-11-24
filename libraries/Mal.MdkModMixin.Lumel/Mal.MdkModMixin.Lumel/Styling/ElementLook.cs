@@ -15,6 +15,7 @@ namespace Lumel.Styling
     public class ElementLook
     {
         Color? _background;
+        bool? _followsUserBackgroundOpacity;
         Color? _border;
         float? _borderThickness;
         Thickness? _padding;
@@ -34,6 +35,22 @@ namespace Lumel.Styling
             set
             {
                 _background = value;
+                OnChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets whether the background is painted at the <see cref="Lumel.Windows.WindowLayer.UserBackgroundOpacity" /> of the
+        ///     layer the element is in, the game's interface background opacity setting, or null to leave it to the looks
+        ///     beneath.
+        /// </summary>
+        /// <remarks>Fades the background fill alone: the pattern, the border and the content keep their colors.</remarks>
+        public bool? FollowsUserBackgroundOpacity
+        {
+            get { return _followsUserBackgroundOpacity; }
+            set
+            {
+                _followsUserBackgroundOpacity = value;
                 OnChanged();
             }
         }
@@ -121,6 +138,7 @@ namespace Lumel.Styling
         public virtual void Merge(ElementLook over)
         {
             _background = over._background ?? _background;
+            _followsUserBackgroundOpacity = over._followsUserBackgroundOpacity ?? _followsUserBackgroundOpacity;
             _pattern = over._pattern ?? _pattern;
             _border = over._border ?? _border;
             _borderThickness = over._borderThickness ?? _borderThickness;
@@ -133,6 +151,7 @@ namespace Lumel.Styling
         public virtual void Clear()
         {
             _background = null;
+            _followsUserBackgroundOpacity = null;
             _pattern = null;
             _border = null;
             _borderThickness = null;

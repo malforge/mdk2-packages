@@ -164,6 +164,11 @@ namespace Lumel.Screens
         protected override void OnDraw(float transitionAlpha)
         {
             _graphics.Begin();
+
+            // The game raises nothing when its options change, so the setting is read on every frame drawn.
+            var config = MyAPIGateway.Session?.Config;
+            _view.Windows.UserBackgroundOpacity = config != null ? config.UIBkOpacity : 1f;
+
             _view.Update();
             _view.DrawScreen(_graphics, _graphics.BoundsOf(ScreenArea.Window), _graphics.BoundsOf(ScreenArea.Terminal));
         }

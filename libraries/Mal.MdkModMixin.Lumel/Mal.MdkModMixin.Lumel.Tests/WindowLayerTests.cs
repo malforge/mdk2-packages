@@ -192,6 +192,40 @@ public class WindowLayerTests
         return (layer, popup, scroll, rows);
     }
 
+    /// <summary>
+    ///     An element whose look follows the background opacity, a window or anything in one, paints its background at
+    ///     the layer's opacity, and one whose look does not paints it as its look says.
+    /// </summary>
+    [Theory]
+    [InlineData(true, 100)]
+    [InlineData(false, 200)]
+    public void AnElementFollowingTheUserBackgroundOpacityFadesItsBackground(bool follows, int alpha)
+    {
+        var label = new Label { Base = { Background = new Color(40, 50, 60, 200), FollowsUserBackgroundOpacity = follows }, Text = "Words" };
+        var window = new Window
+        {
+            Base = { Background = new Color(10, 20, 30, 200), FollowsUserBackgroundOpacity = true },
+            Placement = FixedSize.Size(300f, 200f),
+            Content = label
+        };
+        var layer = new WindowLayer { UserBackgroundOpacity = 0.5f };
+        layer.Open(window);
+        var recording = new Recording(Area);
+
+        layer.Draw(recording, Area);
+
+        Assert.Equal(new Color(10, 20, 30, 100), FillOf(recording, window));
+        Assert.Equal(new Color(40, 50, 60, alpha), FillOf(recording, label));
+    }
+
+    /// <summary>Returns the color <paramref name="element" />'s background was painted in on <paramref name="recording" />.</summary>
+    static Color FillOf(Recording recording, Element element)
+    {
+        var index = recording.Fills.IndexOf(element.Bounds);
+        Assert.True(index >= 0, "the background was not painted");
+        return recording.FillColors[index];
+    }
+
     static (WindowLayer, Window, Button) Opened(bool modal)
     {
         var button = new Button { Text = "Go", Command = new RelayCommand(() => { }) };

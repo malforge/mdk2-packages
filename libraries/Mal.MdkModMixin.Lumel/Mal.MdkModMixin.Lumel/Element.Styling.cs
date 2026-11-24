@@ -30,6 +30,13 @@ namespace Lumel
         public Color Background { get; private set; }
 
         /// <summary>
+        ///     Whether the <see cref="Background" /> is painted at the <see cref="Lumel.Windows.WindowLayer.UserBackgroundOpacity" /> of the
+        ///     layer this is in.
+        /// </summary>
+        /// <remarks>Set by this element's looks.</remarks>
+        public bool FollowsUserBackgroundOpacity { get; private set; }
+
+        /// <summary>
         ///     The pattern laid across <see cref="Bounds" /> over the <see cref="Background" /> before anything else,
         ///     or null for none.
         /// </summary>
@@ -210,6 +217,7 @@ namespace Lumel
         protected virtual void Apply(ElementLook look)
         {
             Background = look.Background ?? Color.Transparent;
+            FollowsUserBackgroundOpacity = look.FollowsUserBackgroundOpacity ?? false;
             Pattern = look.Pattern;
             Border = look.Border ?? Color.Transparent;
             BorderThickness = look.BorderThickness ?? 1f;

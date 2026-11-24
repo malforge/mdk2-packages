@@ -18,12 +18,24 @@ namespace Lumel.Windows
         readonly List<Countdown> _due = new List<Countdown>();
         int _now;
         ITheme _theme;
+        float _userBackgroundOpacity = 1f;
 
         /// <summary>
         ///     Gets or sets the resources the windows open here, and the screen this layer covers, find above everything in
         ///     them: their workspace's.
         /// </summary>
         public ResourceDictionary Resources { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the opacity, from 0 to 1, of the background of each element in the windows here whose
+        ///     <see cref="Element.FollowsUserBackgroundOpacity" /> is set.
+        /// </summary>
+        /// <remarks>1 unless set; the game's screen sets it from the game's interface background opacity on every frame it draws.</remarks>
+        public float UserBackgroundOpacity
+        {
+            get { return _userBackgroundOpacity; }
+            set { _userBackgroundOpacity = MathHelper.Clamp(value, 0f, 1f); }
+        }
 
         /// <summary>Gets the number of open windows.</summary>
         public int Count => _open.Count;
