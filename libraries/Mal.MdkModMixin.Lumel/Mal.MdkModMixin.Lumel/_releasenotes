@@ -1,3 +1,6 @@
+- 1.0.0-beta.8
+  A combo box: a field to type into with a list of choices under it, narrowed as the player types; a choice
+  picked or the words typed are the answer, raised as Committed. A text box raises GotFocus and LostFocus.
 - 1.0.0-beta.7
   An element whose look sets FollowsUserBackgroundOpacity paints its background at the game's interface background
   opacity setting.

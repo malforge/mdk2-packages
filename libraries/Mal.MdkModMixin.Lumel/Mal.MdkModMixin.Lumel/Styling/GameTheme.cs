@@ -475,6 +475,30 @@ namespace Lumel.Styling
             Base = { Spacing = 4f, ClearSymbol = "x", ClearSize = 28f }
         };
 
+        /// <summary>The style for the field of a combo box: a text box's words, caret, selection and hint, on no plate of its own.</summary>
+        public static readonly IStyle<TextBox> ComboBoxField = new TextBoxStyle
+        {
+            Base = { Font = GameFonts.Default, FontSize = 20f, Color = GameColors.Ink, CaretColor = GameColors.Ink, SelectionColor = GameColors.Line, HintColor = GameColors.Faint },
+            Disabled = { Color = GameColors.Dim }
+        };
+
+        /// <summary>
+        ///     The style for a combo box: a text box's plate and edge, with its field and a muted arrow at its right, the
+        ///     edge lit while it holds the keyboard or its list is open, and dimmed when disabled.
+        /// </summary>
+        public static readonly IStyle<ComboBox> ComboBox = new ComboBoxStyle
+        {
+            Base =
+            {
+                Background = GameColors.Page, Border = GameColors.Line, Padding = new Thickness(12f, 8f), Arrow = GameColors.Muted, ArrowSize = 12f,
+                ArrowSpacing = 16f, FieldStyle = ComboBoxField, HoverSound = HoverSound, ClickSound = ClickSound
+            },
+            PointerOver = { Arrow = GameColors.Ink },
+            Focused = { Border = GameColors.ControlEdgeHot },
+            Expanded = { Border = GameColors.ControlEdgeHot, Arrow = GameColors.Ink },
+            Disabled = { Arrow = GameColors.Dim }
+        };
+
         /// <summary>The theme containing every style above, each the default for its kind of control.</summary>
         public static readonly ITheme Theme = new Theme
         {
@@ -517,6 +541,7 @@ namespace Lumel.Styling
             Slider,
             Dial,
             DropDown,
+            ComboBox,
             SearchBox
         };
     }

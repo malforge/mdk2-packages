@@ -358,15 +358,29 @@ namespace Lumel.Text
             _core.DeleteForward();
         }
 
+        /// <summary>Raised when the box has taken keyboard focus.</summary>
+        public event Action GotFocus;
+
+        /// <summary>Raised when the box has lost keyboard focus.</summary>
+        public event Action LostFocus;
+
         /// <inheritdoc />
         protected override void OnGotFocus(bool byPress)
         {
             _core.RestartBlink();
-            if (!SelectsAll)
-                return;
+            if (SelectsAll)
+            {
+                SelectAll();
+                _entering = byPress;
+            }
 
-            SelectAll();
-            _entering = byPress;
+            GotFocus?.Invoke();
+        }
+
+        /// <inheritdoc />
+        protected override void OnLostFocus()
+        {
+            LostFocus?.Invoke();
         }
 
         /// <inheritdoc />
