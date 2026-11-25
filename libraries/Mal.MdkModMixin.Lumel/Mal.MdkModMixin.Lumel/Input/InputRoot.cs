@@ -24,6 +24,9 @@ namespace Lumel.Input
         Element _focused;
         bool _keysLast;
 
+        /// <summary>Gets the element holding the pointer while a press begun on it is held, or null.</summary>
+        public Element Captured => _captured;
+
         /// <summary>
         ///     Creates input handling for the tree under <paramref name="root" />, or for trees a host finds itself where
         ///     <paramref name="root" /> is null.

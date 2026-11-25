@@ -324,6 +324,10 @@ namespace Lumel
         /// <summary>The number of presses in quick succession that the last press on this was part of.</summary>
         public int ClickCount { get; private set; }
 
+        /// <summary>Gets or sets what dropping a dragged thing on this does, or null where nothing can be dropped here.</summary>
+        /// <remarks>Read when a drag begins: a target set during a drag takes part in the next one.</remarks>
+        public IDropTarget DropTarget { get; set; }
+
         /// <summary>Gets or sets what using this does, or null for nothing.</summary>
         /// <remarks>Carried out when a press begun on this is released on it, while it is enabled.</remarks>
         public ICommand Command
@@ -663,6 +667,29 @@ namespace Lumel
             }
 
             return TipAt(point) != null ? this : null;
+        }
+
+        /// <summary>
+        ///     Returns the deepest drop target at <paramref name="point" /> in <see cref="DragDrop.Accepting" />, or null.
+        /// </summary>
+        /// <remarks>A target counts only where it is shown, so one scrolled out of view or clipped away is passed over.</remarks>
+        public Element DropTargetAt(Vector2 point)
+        {
+            if (_hidden)
+                return null;
+
+            point = Local(point);
+            if (!Holds(point))
+                return null;
+
+            for (var i = VisualChildCount - 1; i >= 0; i--)
+            {
+                var found = GetVisualChild(i).DropTargetAt(point);
+                if (found != null)
+                    return found;
+            }
+
+            return DropTarget != null && Is(DragDrop.Accepting) ? this : null;
         }
 
         /// <summary>

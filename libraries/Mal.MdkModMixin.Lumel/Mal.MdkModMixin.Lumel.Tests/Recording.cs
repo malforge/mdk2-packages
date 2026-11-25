@@ -60,8 +60,12 @@ sealed class Recording(RectangleF area) : IGraphics
 
     public Vector2 FromDevicePixels(Vector2 pixels) => pixels;
 
+    /// <summary>Gets each transform pushed, with the number of fills drawn before it.</summary>
+    public List<(RenderTransform Transform, int FillsBefore)> Transforms { get; } = new List<(RenderTransform, int)>();
+
     public void PushTransform(RenderTransform transform, Vector2 origin)
     {
+        Transforms.Add((transform, Fills.Count));
     }
 
     public void PopTransform()

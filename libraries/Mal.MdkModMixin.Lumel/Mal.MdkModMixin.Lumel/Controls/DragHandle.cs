@@ -2,6 +2,7 @@ using System;
 using Lumel.Drawing;
 using Lumel.Input;
 using Lumel.Styling;
+using Lumel.Windows;
 using VRageMath;
 
 namespace Lumel.Controls
@@ -89,6 +90,18 @@ namespace Lumel.Controls
         /// <remarks>Set by this handle's looks.</remarks>
         public float DotSpacing => _dotSpacing;
 
+        /// <summary>
+        ///     Gets or sets what grabbing the handle drags to a drop target through its layer's
+        ///     <see cref="WindowLayer.DragDrop" />, or null where it drags nothing there.
+        /// </summary>
+        public object DragData { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the element drawn where the pointer takes it while <see cref="DragData" /> is dragged, or null
+        ///     for the handle itself.
+        /// </summary>
+        public Element DragGhost { get; set; }
+
         /// <summary>Whether the handle can currently be grabbed.</summary>
         public bool CanDrag { get; set; }
 
@@ -140,7 +153,10 @@ namespace Lumel.Controls
                 return;
 
             IsDragging = true;
-            DragStarted?.Invoke(ToScreen(point));
+            var at = ToScreen(point);
+            if (DragData != null)
+                Windows?.DragDrop.Begin(this, DragData, at, DragGhost ?? this);
+            DragStarted?.Invoke(at);
         }
 
         /// <inheritdoc />
@@ -149,7 +165,9 @@ namespace Lumel.Controls
             if (button != PointerButton.Left)
                 return;
 
-            DragDelta?.Invoke(ToScreen(point));
+            var at = ToScreen(point);
+            Carried()?.Move(at);
+            DragDelta?.Invoke(at);
         }
 
         /// <inheritdoc />
@@ -159,7 +177,9 @@ namespace Lumel.Controls
                 return;
 
             IsDragging = false;
-            DragCompleted?.Invoke(ToScreen(point));
+            var at = ToScreen(point);
+            Carried()?.Drop(at);
+            DragCompleted?.Invoke(at);
         }
 
         /// <inheritdoc />
@@ -169,7 +189,15 @@ namespace Lumel.Controls
                 return;
 
             IsDragging = false;
+            Carried()?.Cancel();
             DragCanceled?.Invoke();
+        }
+
+        /// <summary>Returns the layer's drag if this handle began it, or null.</summary>
+        DragDrop Carried()
+        {
+            var drag = Windows?.DragDrop;
+            return drag != null && drag.IsDragging && drag.Source == this ? drag : null;
         }
 
         /// <inheritdoc />

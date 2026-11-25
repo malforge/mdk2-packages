@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lumel.Drawing;
+using Lumel.Input;
 using Lumel.Layout;
 using Lumel.Styling;
 using VRageMath;
@@ -19,6 +20,15 @@ namespace Lumel.Windows
         int _now;
         ITheme _theme;
         float _userBackgroundOpacity = 1f;
+
+        /// <summary>Creates a layer with no windows open.</summary>
+        public WindowLayer()
+        {
+            DragDrop = new DragDrop(this);
+        }
+
+        /// <summary>Gets the drag and drop of the windows in this layer.</summary>
+        public DragDrop DragDrop { get; }
 
         /// <summary>
         ///     Gets or sets the resources the windows open here, and the screen this layer covers, find above everything in
@@ -204,6 +214,8 @@ namespace Lumel.Windows
                 window.DrawBehind(g);
                 window.Draw(g);
             }
+
+            DragDrop.DrawGhost(g);
         }
 
         /// <summary>
@@ -427,6 +439,22 @@ namespace Lumel.Windows
             }
 
             stopped = false;
+            return null;
+        }
+
+        /// <summary>
+        ///     Returns the deepest accepting drop target at <paramref name="point" /> in the window there, or in a window
+        ///     beneath where none is there and none above is modal, or null.
+        /// </summary>
+        public Element DropTargetAt(Vector2 point)
+        {
+            for (var i = _open.Count - 1; i >= 0; i--)
+            {
+                var found = _open[i].DropTargetAt(point);
+                if (found != null || On(_open[i], point) || _open[i].IsModal)
+                    return found;
+            }
+
             return null;
         }
 

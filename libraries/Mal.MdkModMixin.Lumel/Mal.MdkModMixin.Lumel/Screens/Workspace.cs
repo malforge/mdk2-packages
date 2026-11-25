@@ -319,6 +319,7 @@ namespace Lumel.Screens
             var owner = TipOwnerAt(at);
             _tips.Update(owner, owner == null ? null : TipFor(owner, owner.TipAt(owner.FromScreen(at))), at, g.Now);
             LightPointerOver();
+            _windows.DragDrop.Move(Pointer);
 
             _windows.Draw(g, screen, terminal);
             _tips.Present(g, screen);
@@ -392,11 +393,19 @@ namespace Lumel.Screens
         public virtual bool Key(MyKeys key, bool shift, bool ctrl)
         {
             KeepFocusShown();
+            Intent intent;
+            var cancels = _input.Intents.TryGetValue(key, out intent) && intent == Intent.Cancel;
+            if (cancels && _windows.DragDrop.IsDragging)
+            {
+                _windows.DragDrop.Cancel();
+                _input.ReleasePointerCapture();
+                return true;
+            }
+
             if (_input.Key(KeysFrom(), key, shift, ctrl))
                 return true;
 
-            Intent intent;
-            return _input.Intents.TryGetValue(key, out intent) && intent == Intent.Cancel && CloseTop();
+            return cancels && CloseTop();
         }
 
         /// <summary>Handles a typed character by sending it to the element that has the keyboard.</summary>
@@ -542,10 +551,16 @@ namespace Lumel.Screens
                 Sounds.Play(chosen);
         }
 
-        /// <summary>Lights what a press at the pointer would reach, and plays its hover sound where it can be pressed.</summary>
+        /// <summary>
+        ///     Lights what a press at the pointer would reach, and plays its hover sound where it can be pressed; while a
+        ///     press holds the pointer, only the element holding it is lit, and only while the pointer is on it.
+        /// </summary>
         void LightPointerOver()
         {
             var wanted = HitTest(Pointer);
+            var captured = _input.Captured;
+            if (captured != null && wanted != captured)
+                wanted = null;
             if (wanted == _pointerOver)
                 return;
 
