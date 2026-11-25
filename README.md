@@ -29,7 +29,7 @@ This naming helps you quickly identify which libraries are suitable for your pro
 | Package | Version | Author(s) | Description |
 |---------|---------|-----------|-------------|
 | [Lelebees.MdkScriptMixin.SpriteCompositor](./docs/libraries/Lelebees.MdkScriptMixin.SpriteCompositor.md) | 2.1.0 | Lelebees | API wrapper simplifying the native Space Engineers LCD Sprite API. Supports composing your own sprites out of a collection of existing sprites. |
-| [Mal.MdkModMixin.Lumel](./docs/libraries/Mal.MdkModMixin.Lumel.md) | 1.0.0-beta.8 | Malware | A UI framework for Space Engineers mods: the controls, layout, text, drawing and screens an interface is built from. |
+| [Mal.MdkModMixin.Lumel](./docs/libraries/Mal.MdkModMixin.Lumel.md) | 1.0.0-beta.9 | Malware | A UI framework for Space Engineers mods: the controls, layout, text, drawing and screens an interface is built from. |
 | [Mal.MdkModMixin.Lumel.Sim](./docs/libraries/Mal.MdkModMixin.Lumel.Sim.md) | 1.0.0-beta.1 | Malware | The game's screen drawn on a desktop, for the test harness of a mod built on Lumel: what the mod draws, without the game running. |
 | [Mal.MdkModMixin.Network](./docs/libraries/Mal.MdkModMixin.Network.md) | 1.0.1 | Malware | Networking for Space Engineers mods: one channel per mod carrying any number of message types, with sends to the server, to one player, to everyone or to players nearby. |
 | [Mal.MdkScriptMixin.Coroutines](./docs/libraries/Mal.MdkScriptMixin.Coroutines.md) | 1.0.9 | Malware | A lightweight coroutine scheduler for Space Engineers programmable blocks, enabling async-style programming patterns. |
@@ -67,5 +67,5 @@ Look, I hate having to add this section. I'd rather just share cool code with fe
 
 ---
 
-*This README was auto-generated from library metadata. Last updated: 2026-11-24*
+*This README was auto-generated from library metadata. Last updated: 2026-11-25*
 

@@ -1,6 +1,11 @@
 # Release Notes - Mal.MdkModMixin.Lumel
 
 ````````text
+- 1.0.0-beta.9
+  Drag and drop: an element given a DropTarget takes data dragged from a DragHandle given DragData, or from a drag
+  begun through its layer's DragDrop. While dragging, targets are in DragDrop.Accepting or DragDrop.Refusing, the one
+  under the pointer in DragDrop.DraggedOver, and a ghost follows the pointer; Escape cancels. While a press holds the
+  pointer, only the element holding it is under the pointer.
 - 1.0.0-beta.8
   A combo box: a field to type into with a list of choices under it, narrowed as the player types; a choice
   picked or the words typed are the answer, raised as Committed. A text box raises GotFocus and LostFocus.
@@ -29,4 +34,4 @@
 
 ---
 
-*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-24*
+*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-25*

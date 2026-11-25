@@ -108,4 +108,4 @@ to test sending and receiving outside the game.
 
 ---
 
-*Documentation auto-generated from package metadata. Last updated: 2026-11-24*
+*Documentation auto-generated from package metadata. Last updated: 2026-11-25*

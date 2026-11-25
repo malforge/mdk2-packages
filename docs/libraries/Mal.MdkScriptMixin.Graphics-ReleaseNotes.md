@@ -30,4 +30,4 @@
 
 ---
 
-*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-24*
+*Release notes auto-generated from `_releasenotes` file. Last updated: 2026-11-25*
